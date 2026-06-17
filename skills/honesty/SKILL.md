@@ -89,7 +89,7 @@ ripple. Route a finding to **auto-fix** only when **all four** hold:
 | Factor | Auto-fix requires |
 |---|---|
 | **confidence** | `high` — certain the comment is wrong AND the fix is right |
-| **complexity** | `mechanical` — a localised factual correction (count/date/enum/line-ref/name/clearly-wrong clause). NOT a rewrite that encodes judgment, NOT a gap-fill (adding new explanatory text) |
+| **complexity** | `mechanical` — a localised factual correction (count/date/enum/line-ref/name/clearly-wrong clause). NOT a rewrite that encodes judgment, NOT a gap-fill (adding new explanatory text), and NOT a correction to a **code or usage example** in a comment/docstring — those are `substantive` even when they look like a factual fix, because the replacement encodes API knowledge that must be verified against the real exports/signatures first (a "fixed" example can itself be subtly wrong) |
 | **blast_radius** | `local` — an inline/block comment scoped to one function/section. NOT a contract-defining docstring many callers depend on, NOT cross-cutting |
 | **surface** | inline/block/jsdoc-local only. **Doc files (CLAUDE.md/README/ARCHITECTURE/SCHEMA) and config files are NEVER auto-fixed** — high blast radius, often human-owned |
 
@@ -108,9 +108,12 @@ calibration batch has shown the signal is clean. The auto-fix threshold is a kno
 - **Comment-only edits.** A fix changes comment characters only — never code, logic, identifiers, or
   control flow. Verify with a diff (no non-comment line changed) + a clean build.
 - **Conservative, high-signal.** Trust is the product. One bogus finding and the report gets ignored.
-- **A finding can surface a real bug.** When a comment is "technically true but hides a divergence"
-  (two code paths that should agree but don't), correct the comment AND file an issue for the real fix —
-  don't silently bury it.
+- **A finding can surface a real bug — a false comment is a lead, not just noise.** Two shapes recur:
+  (1) a comment that is *technically true but hides a divergence* (two code paths that should agree but
+  don't); and (2) a comment that describes a **guard or behaviour that doesn't exist** — e.g. "only runs
+  when X and not when already-picked" where no such guard is in the code, so the missing guard is itself
+  the bug. In both, correct the comment to match reality AND file an issue for the real fix — don't
+  silently bury it, and don't "fix" the comment by inventing the behaviour it claims.
 
 ## Modes / depth
 

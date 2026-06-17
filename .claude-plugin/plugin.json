@@ -1,7 +1,7 @@
 {
   "name": "honesty",
   "description": "Audit a codebase so every comment, docstring, and doc file tells the truth about the code — for the next AI agent (or human) who reads it before changing anything. Finds stale, inaccurate, misleading, and missing comments; ships fixes through a confidence- and blast-radius-gated auto-fix vs review queue.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Jeremy Dawes",
     "email": "jeremy@jezweb.net"

@@ -50,9 +50,11 @@ calibration batch proves the signal.
 
 ## What it catches (evidence from real runs)
 
-Run on a production codebase, module by module, the audit produced **only real findings — no false
-positives** across the calibration batches (verified against ground-truth knowledge of the files). The
-classes that carried the value:
+Run on a production codebase, module by module, the audit produced **only real findings — 29/29 across
+four batches, no false positives** (verified against ground-truth knowledge of the files). The
+comment-dense server surfaces yielded most of them (7 + 12 + 5); the comment-light client tree yielded
+only 5 across the *entire* tree — strong evidence the rubric tracks real drift instead of manufacturing
+noise on whatever surface you point it at. The classes that carried the value:
 
 - **Self-contradicting / wrong API docs.** A function documented "returns `null` if X" that actually
   *throws* — its own next line even said "throws". The dangerous class: it directly causes coding
@@ -68,6 +70,11 @@ classes that carried the value:
   rest of the app used a live source — so the two screens silently disagreed. Honesty corrected the
   comment **and** filed an issue for the actual divergence. A comment audit that takes the comment's
   framing at face value misses this; one that checks the comment against *all* the code finds it.
+- **A false comment describing a guard that doesn't exist.** A typeahead comment claimed the search was
+  suppressed "when the value is already a code we just picked" — but no such guard was in the effect, and
+  picking a row re-set the value and silently re-fired the search (re-opening the dropdown). The *absence*
+  the comment papered over was the bug. The honest fix is to correct the comment to describe reality (no
+  guard) and file the behaviour issue — **never** to "fix" the comment by pretending the guard exists.
 
 The through-line: the value isn't cosmetic. Trustworthy comments make every future change — especially
 an agent's — faster and safer, and the audit surfaces genuine correctness issues along the way.
