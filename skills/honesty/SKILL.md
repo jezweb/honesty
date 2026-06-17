@@ -5,6 +5,8 @@ description: Audit a codebase so every comment, docstring, and doc file is a TRU
 
 # Honesty — make the codebase tell the truth
 
+> Part of the **shipwright** method — see the `shipwright` skill for the work-loop this move fits into and when to reach for it.
+
 A comment is a promise about what the code does. When it drifts, it becomes worse than no comment:
 the next reader — increasingly an **AI agent** — *trusts it*, builds a wrong mental model, and ships a
 mistake. Honesty audits every claim the codebase makes about itself and either corrects it or flags
