@@ -1,0 +1,14 @@
+{
+  "name": "honesty",
+  "owner": {
+    "name": "Jeremy Dawes",
+    "email": "jeremy@jezweb.net"
+  },
+  "plugins": [
+    {
+      "name": "honesty",
+      "source": "./",
+      "description": "Audit a codebase so every comment, docstring, and doc file is a true and useful reflection of the code — built for the next AI agent that reads them. Module-by-module audit with a 5-category rubric, structured findings, and a confidence/complexity/blast-radius-gated split between auto-fix and human review."
+    }
+  ]
+}

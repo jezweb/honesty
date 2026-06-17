@@ -1,0 +1,32 @@
+{
+  "$comment": "JSON Schema for one audit bundle's structured output. Pass as the `schema` to each per-bundle audit agent so findings come back validated + uniform. The disposition fields (confidence, complexity, blast_radius, surface) drive the auto-fix-vs-review gate — see SKILL.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundle", "files_audited", "findings", "summary"],
+  "properties": {
+    "bundle": { "type": "string" },
+    "files_audited": { "type": "array", "items": { "type": "string" } },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "line", "category", "severity", "confidence", "complexity", "blast_radius", "surface", "comment_excerpt", "problem", "suggested_fix"],
+        "properties": {
+          "file": { "type": "string" },
+          "line": { "type": "number" },
+          "category": { "type": "string", "enum": ["inaccurate", "stale", "misleading", "gap", "unclear"] },
+          "severity": { "type": "string", "enum": ["high", "medium", "low"], "$comment": "high = would cause a coding mistake (dead code, missing try/catch, wrong API use); medium = wrong mental model; low = clarity" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "complexity": { "type": "string", "enum": ["mechanical", "substantive"], "$comment": "mechanical = a localised factual correction (count/date/enum/line-ref/name/clearly-wrong clause); substantive = a rewrite encoding judgment, or a gap-fill that adds new explanatory text" },
+          "blast_radius": { "type": "string", "enum": ["local", "wide"], "$comment": "local = a comment scoped to one function/section; wide = a contract docstring many callers depend on, or cross-cutting" },
+          "surface": { "type": "string", "enum": ["inline", "block", "jsdoc", "doc-file", "config"], "$comment": "doc-file + config are NEVER auto-fixed regardless of the other factors" },
+          "comment_excerpt": { "type": "string" },
+          "problem": { "type": "string", "$comment": "precise — reference what the code actually does" },
+          "suggested_fix": { "type": "string", "$comment": "concrete: rewrite text / remove / add-a-comment" }
+        }
+      }
+    },
+    "summary": { "type": "string", "$comment": "files audited, overall comment health, count by severity" }
+  }
+}
